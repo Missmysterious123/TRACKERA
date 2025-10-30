@@ -31,7 +31,7 @@ function MenuItemCard({ item }: { item: MenuItemType }) {
         <CardTitle className="text-lg font-semibold">{item.name}</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
-        <p className="text-primary font-bold mt-2 text-xl">INR {item.price}</p>
+        <p className="text-primary font-bold mt-2 text-xl">INR {item.price.toFixed(2)}</p>
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-end gap-2">
         <Button variant="ghost" size="icon">

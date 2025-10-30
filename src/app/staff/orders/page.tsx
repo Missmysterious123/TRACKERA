@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { PageHeader } from '@/components/app/page-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,20 +28,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { useCollection, useFirebase, updateDocumentNonBlocking } from '@/firebase';
-import { useMemo } from 'react';
-import { collection, doc, query, where } from 'firebase/firestore';
+import { orders as mockOrders, type Order } from '@/lib/data';
 
 type OrderStatus = 'Active' | 'Served' | 'Cancelled';
-
-interface Order {
-  id: string;
-  table_no: number;
-  subtotal: number;
-  gst_amount: number;
-  total: number;
-  status: OrderStatus;
-}
 
 const getStatusBadgeVariant = (
   status: OrderStatus
@@ -58,22 +48,25 @@ const getStatusBadgeVariant = (
 };
 
 export default function ViewOrdersPage() {
-  const { firestore } = useFirebase();
-
-  const ordersQuery = useMemo(() => {
-    if (!firestore) return null;
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
-    return query(collection(firestore, 'orders'), where('date', '>=', startOfDay));
-  }, [firestore]);
-
-  const { data: orders, isLoading } = useCollection<Order>(ordersQuery);
+  const [orders, setOrders] = useState<Order[]>(
+    // @ts-ignore
+    mockOrders.map(o => ({
+      ...o,
+      table_no: o.tableNumber,
+      subtotal: o.total / 1.05, // Approximate subtotal
+      gst_amount: o.total - (o.total / 1.05), // Approximate GST
+    }))
+  );
 
   const handleUpdateStatus = (orderId: string, status: OrderStatus) => {
-    if (!firestore) return;
-    const orderRef = doc(firestore, 'orders', orderId);
-    updateDocumentNonBlocking(orderRef, { status });
+    setOrders(prevOrders =>
+      prevOrders.map(order =>
+        order.id === orderId ? { ...order, status } : order
+      )
+    );
   };
+
+  const isLoading = false; // Mock loading state
 
   return (
     <>
@@ -100,7 +93,7 @@ export default function ViewOrdersPage() {
               <TableRow>
                 <TableHead>Table No</TableHead>
                 <TableHead>Subtotal</TableHead>
-                <TableHead>GST (₹)</TableHead>
+                <TableHead>GST (INR)</TableHead>
                 <TableHead className="text-right">Total</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>
@@ -125,13 +118,13 @@ export default function ViewOrdersPage() {
                     )}
                   >
                     <TableCell className="font-medium">{order.table_no}</TableCell>
-                    <TableCell>₹{order.subtotal.toFixed(2)}</TableCell>
-                    <TableCell>₹{order.gst_amount.toFixed(2)}</TableCell>
+                    <TableCell>INR {order.subtotal.toFixed(2)}</TableCell>
+                    <TableCell>INR {order.gst_amount.toFixed(2)}</TableCell>
                     <TableCell className="text-right font-medium">
-                      ₹{order.total.toFixed(2)}
+                      INR {order.total.toFixed(2)}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={getStatusBadgeVariant(order.status)}>
+                      <Badge variant={getStatusBadgeVariant(order.status as OrderStatus)}>
                         {order.status}
                       </Badge>
                     </TableCell>

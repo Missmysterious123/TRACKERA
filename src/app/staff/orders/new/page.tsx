@@ -22,26 +22,17 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Plus, Minus, CircleDollarSign, NotebookPen } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useCollection, useFirebase, addDocumentNonBlocking, useMemoFirebase } from '@/firebase';
-import { collection, serverTimestamp } from 'firebase/firestore';
-
-interface MenuItem {
-  name: string;
-  price: number;
-}
-
-interface MenuCategory {
-  id: string;
-  name: string;
-  items: MenuItem[];
-}
+import { menuItems as mockMenuItems, type MenuItem as MenuItemType } from '@/lib/data';
 
 type OrderItem = {
-  item: MenuItem;
+  item: MenuItemType;
   quantity: number;
 };
 
 const GST_RATE = 0.05;
+
+// Extract categories from mock data
+const categories = [...new Set(mockMenuItems.map(item => item.category))];
 
 export default function NewOrderPage() {
   const searchParams = useSearchParams();
@@ -49,34 +40,26 @@ export default function NewOrderPage() {
   
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const { toast } = useToast();
-  const { firestore, user } = useFirebase();
 
-  const menuCollectionRef = useMemoFirebase(
-    () => firestore ? collection(firestore, 'menu') : null,
-    [firestore]
-  );
-  
-  const { data: menuCategories, isLoading: isMenuLoading } = useCollection<MenuCategory>(menuCollectionRef);
-
-  const handleAddItem = (item: MenuItem) => {
+  const handleAddItem = (item: MenuItemType) => {
     setOrderItems((prevItems) => {
-      const existingItem = prevItems.find((oi) => oi.item.name === item.name);
+      const existingItem = prevItems.find((oi) => oi.item.id === item.id);
       if (existingItem) {
         return prevItems.map((oi) =>
-          oi.item.name === item.name ? { ...oi, quantity: oi.quantity + 1 } : oi
+          oi.item.id === item.id ? { ...oi, quantity: oi.quantity + 1 } : oi
         );
       }
       return [...prevItems, { item, quantity: 1 }];
     });
   };
 
-  const handleUpdateQuantity = (itemName: string, newQuantity: number) => {
+  const handleUpdateQuantity = (itemId: string, newQuantity: number) => {
     setOrderItems((prevItems) => {
       if (newQuantity <= 0) {
-        return prevItems.filter((oi) => oi.item.name !== itemName);
+        return prevItems.filter((oi) => oi.item.id !== itemId);
       }
       return prevItems.map((oi) =>
-        oi.item.name === itemName ? { ...oi, quantity: newQuantity } : oi
+        oi.item.id === itemId ? { ...oi, quantity: newQuantity } : oi
       );
     });
   };
@@ -100,23 +83,16 @@ export default function NewOrderPage() {
       });
       return;
     }
-    if (!firestore || !user || !tableNumber) return;
 
-    const ordersCollectionRef = collection(firestore, 'orders');
-    const newOrder = {
-      table_no: parseInt(tableNumber, 10),
-      staff_id: user.uid, // Assuming user.uid is the staff_id
-      branch_id: "karad", // This should be dynamic based on staff's branch
-      items: orderItems.map(oi => ({ item_name: oi.item.name, quantity: oi.quantity, price: oi.item.price })),
+    // Here you would typically save the order to a backend.
+    // For now, we'll just show a success message.
+    console.log('Order confirmed:', {
+      tableNumber,
+      orderItems,
       subtotal,
-      gst_rate: GST_RATE * 100,
-      gst_amount: gstAmount,
+      gstAmount,
       total,
-      date: serverTimestamp(),
-      status: "Active",
-    };
-
-    addDocumentNonBlocking(ordersCollectionRef, newOrder);
+    });
 
     toast({
       title: 'Order Confirmed!',
@@ -142,38 +118,37 @@ export default function NewOrderPage() {
       />
       <div className="flex-1 grid lg:grid-cols-3 gap-8 overflow-hidden">
         <div className="lg:col-span-2 flex flex-col overflow-hidden">
-          {isMenuLoading ? <p>Loading menu...</p> : (
-            <Tabs defaultValue={menuCategories?.[0]?.id} className="w-full flex-1 flex flex-col">
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 shrink-0">
-                  {menuCategories?.map((category) => (
-                    <TabsTrigger key={category.id} value={category.id}>
-                      {category.name}
+            <Tabs defaultValue={categories[0]} className="w-full flex-1 flex flex-col">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 shrink-0">
+                  {categories.map((category) => (
+                    <TabsTrigger key={category} value={category}>
+                      {category}
                     </TabsTrigger>
                   ))}
               </TabsList>
               <ScrollArea className="flex-1 mt-4">
-                {menuCategories?.map((category) => (
-                  <TabsContent key={category.id} value={category.id} className="mt-0">
+                {categories.map((category) => (
+                  <TabsContent key={category} value={category} className="mt-0">
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 p-1">
-                      {category.items.map((item) => (
+                      {mockMenuItems.filter(item => item.category === category).map((item) => (
                         <Card
-                          key={item.name}
+                          key={item.id}
                           className="flex items-center p-3 gap-2"
                         >
                           <div className="flex-1">
                             <h3 className="font-semibold">{item.name}</h3>
-                            <p className="text-sm text-primary font-bold">INR {item.price}</p>
+                            <p className="text-sm text-primary font-bold">INR {item.price.toFixed(2)}</p>
                           </div>
                           <div className="flex items-center gap-2">
                              <Button
                               variant="outline"
                               size="icon"
                               className="h-7 w-7"
-                              onClick={() => handleUpdateQuantity(item.name, (orderItems.find(oi => oi.item.name === item.name)?.quantity || 0) - 1)}
+                              onClick={() => handleUpdateQuantity(item.id, (orderItems.find(oi => oi.item.id === item.id)?.quantity || 0) - 1)}
                             >
                               <Minus className="h-4 w-4" />
                             </Button>
-                            <span className="w-6 text-center">{orderItems.find(oi => oi.item.name === item.name)?.quantity || 0}</span>
+                            <span className="w-6 text-center">{orderItems.find(oi => oi.item.id === item.id)?.quantity || 0}</span>
                              <Button
                               variant="outline"
                               size="icon"
@@ -190,7 +165,6 @@ export default function NewOrderPage() {
                 ))}
               </ScrollArea>
             </Tabs>
-          )}
         </div>
 
         <div className="lg:col-span-1 flex flex-col">
@@ -204,7 +178,7 @@ export default function NewOrderPage() {
                   {orderItems.length > 0 ? (
                     <div className="space-y-4">
                       {orderItems.map(({ item, quantity }) => (
-                        <div key={item.name} className="flex items-center gap-4">
+                        <div key={item.id} className="flex items-center gap-4">
                           <div className="flex-1">
                             <p className="font-medium">{item.name}</p>
                             <p className="text-sm text-muted-foreground">INR {item.price.toFixed(2)}</p>
@@ -214,7 +188,7 @@ export default function NewOrderPage() {
                               variant="outline"
                               size="icon"
                               className="h-7 w-7"
-                              onClick={() => handleUpdateQuantity(item.name, quantity - 1)}
+                              onClick={() => handleUpdateQuantity(item.id, quantity - 1)}
                             >
                               <Minus className="h-4 w-4" />
                             </Button>
@@ -223,7 +197,7 @@ export default function NewOrderPage() {
                               variant="outline"
                               size="icon"
                               className="h-7 w-7"
-                              onClick={() => handleUpdateQuantity(item.name, quantity + 1)}
+                              onClick={() => handleUpdateQuantity(item.id, quantity + 1)}
                             >
                               <Plus className="h-4 w-4" />
                             </Button>

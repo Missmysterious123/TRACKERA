@@ -16,25 +16,21 @@ export type MenuItem = {
   name: string;
   category: 'Starters' | 'Main Course' | 'Desserts' | 'Beverages' | 'Breads';
   price: number;
-  imageId: string;
 };
 
 export const menuItems: MenuItem[] = [
-  { id: 's3', name: 'Masala Papad', category: 'Starters', price: 50, imageId: 'starter-3' },
-  { id: 's4', name: 'Papad', category: 'Starters', price: 30, imageId: 'starter-4' },
-  { id: 'm3', name: 'Akha Masur (Garlic)', category: 'Main Course', price: 220, imageId: 'main-3' },
-  { id: 'm4', name: 'Akha Masur (Jeera)', category: 'Main Course', price: 220, imageId: 'main-4' },
-  { id: 'm5', name: 'Akha Masur (Green Chilli)', category: 'Main Course', price: 220, imageId: 'main-5' },
-  { id: 'd1', name: 'Gulab Jamun', category: 'Desserts', price: 120, imageId: 'dessert-1' },
-  { id: 'd2', name: 'Brownie', category: 'Desserts', price: 150, imageId: 'dessert-2' },
-  { id: 'b1', name: 'Lime Soda', category: 'Beverages', price: 80, imageId: 'beverage-1' },
-  { id: 'b2', name: 'Iced Tea', category: 'Beverages', price: 100, imageId: 'beverage-2' },
-  { id: 'b3', name: 'Water Bottle', category: 'Beverages', price: 20, imageId: 'beverage-3' },
-  { id: 'b4', name: 'Sprite', category: 'Beverages', price: 40, imageId: 'beverage-4' },
-  { id: 'b5', name: 'Coca-Cola', category: 'Beverages', price: 40, imageId: 'beverage-5' },
-  { id: 'br1', name: 'Roti', category: 'Breads', price: 25, imageId: 'bread-1' },
-  { id: 'br2', name: 'Chapati', category: 'Breads', price: 20, imageId: 'bread-2' },
-  { id: 'br3', name: 'Tandoori Roti', category: 'Breads', price: 30, imageId: 'bread-3' },
+  { id: 's3', name: 'Masala Papad', category: 'Starters', price: 50 },
+  { id: 's4', name: 'Papad', category: 'Starters', price: 30 },
+  { id: 'm3', name: 'Akha Masur (Garlic)', category: 'Main Course', price: 220 },
+  { id: 'm4', name: 'Akha Masur (Jeera)', category: 'Main Course', price: 220 },
+  { id: 'm5', name: 'Akha Masur (Green Chilli)', category: 'Main Course', price: 220 },
+  { id: 'd1', name: 'Gulab Jamun', category: 'Desserts', price: 120 },
+  { id: 'b3', name: 'Water Bottle', category: 'Beverages', price: 20 },
+  { id: 'b4', name: 'Sprite', category: 'Beverages', price: 40 },
+  { id: 'b5', name: 'Coca-Cola', category: 'Beverages', price: 40 },
+  { id: 'br1', name: 'Roti', category: 'Breads', price: 25 },
+  { id: 'br2', name: 'Chapati', category: 'Breads', price: 20 },
+  { id: 'br3', name: 'Tandoori Roti', category: 'Breads', price: 30 },
 ];
 
 export const managers = [
@@ -59,7 +55,7 @@ export type Order = {
   tableNumber: string;
   items: { menuItem: MenuItem; quantity: number }[];
   total: number;
-  status: 'Pending' | 'Served' | 'Cancelled';
+  status: 'Active' | 'Served' | 'Cancelled';
   timestamp: Date;
 };
 
@@ -71,18 +67,18 @@ export const orders: Order[] = [
       { menuItem: menuItems[0], quantity: 2 },
       { menuItem: menuItems[1], quantity: 1 },
     ],
-    total: 950,
-    status: 'Pending',
+    total: 136.5,
+    status: 'Active',
     timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
   },
   {
     id: 'ORD002',
     tableNumber: '2',
     items: [
-      { menuItem: menuItems[0], quantity: 1 },
-      { menuItem: menuItems[2], quantity: 2 },
+      { menuItem: menuItems[2], quantity: 1 },
+      { menuItem: menuItems[3], quantity: 2 },
     ],
-    total: 410,
+    total: 693,
     status: 'Served',
     timestamp: new Date(new Date().setDate(new Date().getDate() - 2)),
   },
@@ -90,11 +86,11 @@ export const orders: Order[] = [
     id: 'ORD003',
     tableNumber: '8',
     items: [
-      { menuItem: menuItems[1], quantity: 2 },
       { menuItem: menuItems[4], quantity: 1 },
+      { menuItem: menuItems[5], quantity: 1 },
     ],
-    total: 390,
-    status: 'Pending',
+    total: 357,
+    status: 'Active',
     timestamp: new Date(),
   },
 ];
