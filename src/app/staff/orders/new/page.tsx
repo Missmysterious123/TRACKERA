@@ -30,6 +30,7 @@ import { Label } from '@/components/ui/label';
 const categories: MenuItemType['category'][] = [
   'Starters',
   'Main Course',
+  'Breads',
   'Desserts',
   'Beverages',
 ];
@@ -108,7 +109,7 @@ export default function NewOrderPage() {
       <div className="flex-1 grid md:grid-cols-3 gap-8 overflow-hidden">
         <div className="md:col-span-2 flex flex-col overflow-hidden">
           <Tabs defaultValue="Starters" className="flex-1 flex flex-col">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 shrink-0">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 shrink-0">
               {categories.map((category) => (
                 <TabsTrigger key={category} value={category}>
                   {category}

@@ -13,6 +13,18 @@
       "imageHint": "spring rolls"
     },
     {
+      "id": "starter-3",
+      "description": "Masala Papad",
+      "imageUrl": "https://picsum.photos/seed/starter3/400/300",
+      "imageHint": "masala papad"
+    },
+    {
+      "id": "starter-4",
+      "description": "Papad",
+      "imageUrl": "https://picsum.photos/seed/starter4/400/300",
+      "imageHint": "papad"
+    },
+    {
       "id": "main-1",
       "description": "Dal Makhani",
       "imageUrl": "https://picsum.photos/seed/main1/400/300",
@@ -23,6 +35,24 @@
       "description": "Shahi Paneer",
       "imageUrl": "https://images.unsplash.com/photo-1690401767645-595de0e0e5f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzaGFoaSUyMHBhbmVlcnxlbnwwfHx8fDE3NjE3OTYyODF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "shahi paneer"
+    },
+    {
+      "id": "main-3",
+      "description": "Akha Masur with Garlic",
+      "imageUrl": "https://picsum.photos/seed/main3/400/300",
+      "imageHint": "akha masur"
+    },
+    {
+      "id": "main-4",
+      "description": "Akha Masur with Jeera",
+      "imageUrl": "https://picsum.photos/seed/main4/400/300",
+      "imageHint": "akha masur"
+    },
+    {
+      "id": "main-5",
+      "description": "Akha Masur with Green Chilli",
+      "imageUrl": "https://picsum.photos/seed/main5/400/300",
+      "imageHint": "akha masur"
     },
     {
       "id": "dessert-1",
@@ -47,6 +77,42 @@
       "description": "Iced Tea",
       "imageUrl": "https://images.unsplash.com/photo-1499638673689-79a0b5115d87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpY2VkJTIwdGVhfGVufDB8fHx8MTc2MTcwMzIxOXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "iced tea"
+    },
+    {
+      "id": "beverage-3",
+      "description": "Water Bottle",
+      "imageUrl": "https://images.unsplash.com/photo-1625708458528-802ec79b1ed8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3YXRlciUyMGJvdHRsZXxlbnwwfHx8fDE3NjE3ODc3NDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "water bottle"
+    },
+    {
+      "id": "beverage-4",
+      "description": "Sprite",
+      "imageUrl": "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzb2Z0JTIwZHJpbmt8ZW58MHx8fHwxNzYxNzk2NzUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "soft drink"
+    },
+    {
+      "id": "beverage-5",
+      "description": "Coca-Cola",
+      "imageUrl": "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzb2Z0JTIwZHJpbmt8ZW58MHx8fHwxNzYxNzk2NzUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "soft drink"
+    },
+    {
+      "id": "bread-1",
+      "description": "Roti",
+      "imageUrl": "https://images.unsplash.com/photo-1600935926387-12d9b03066f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb3RpfGVufDB8fHx8MTc2MTc5Njc1MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "roti"
+    },
+    {
+      "id": "bread-2",
+      "description": "Chapati",
+      "imageUrl": "https://images.unsplash.com/photo-1596630746584-70e37fe6c313?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2hhcGF0aXxlbnwwfHx8fDE3NjE3OTY3NTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chapati"
+    },
+    {
+      "id": "bread-3",
+      "description": "Tandoori Roti",
+      "imageUrl": "https://images.unsplash.com/photo-1610886251108-db6a449ce6b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0YW5kb29yaSUyMHJvdGl8ZW58MHx8fHwxNzYxNzk2NzUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tandoori roti"
     }
   ]
 }

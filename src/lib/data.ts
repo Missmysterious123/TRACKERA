@@ -13,7 +13,7 @@ export const branches = [
 export type MenuItem = {
   id: string;
   name: string;
-  category: 'Starters' | 'Main Course' | 'Desserts' | 'Beverages';
+  category: 'Starters' | 'Main Course' | 'Desserts' | 'Beverages' | 'Breads';
   price: number;
   imageId: string;
 };
@@ -21,12 +21,23 @@ export type MenuItem = {
 export const menuItems: MenuItem[] = [
   { id: 's1', name: 'Paneer Tikka', category: 'Starters', price: 250, imageId: 'starter-1' },
   { id: 's2', name: 'Spring Rolls', category: 'Starters', price: 180, imageId: 'starter-2' },
+  { id: 's3', name: 'Masala Papad', category: 'Starters', price: 50, imageId: 'starter-3' },
+  { id: 's4', name: 'Papad', category: 'Starters', price: 30, imageId: 'starter-4' },
   { id: 'm1', name: 'Dal Makhani', category: 'Main Course', price: 300, imageId: 'main-1' },
   { id: 'm2', name: 'Shahi Paneer', category: 'Main Course', price: 350, imageId: 'main-2' },
+  { id: 'm3', name: 'Akha Masur (Garlic)', category: 'Main Course', price: 220, imageId: 'main-3' },
+  { id: 'm4', name: 'Akha Masur (Jeera)', category: 'Main Course', price: 220, imageId: 'main-4' },
+  { id: 'm5', name: 'Akha Masur (Green Chilli)', category: 'Main Course', price: 220, imageId: 'main-5' },
   { id: 'd1', name: 'Gulab Jamun', category: 'Desserts', price: 120, imageId: 'dessert-1' },
   { id: 'd2', name: 'Brownie', category: 'Desserts', price: 150, imageId: 'dessert-2' },
   { id: 'b1', name: 'Lime Soda', category: 'Beverages', price: 80, imageId: 'beverage-1' },
   { id: 'b2', name: 'Iced Tea', category: 'Beverages', price: 100, imageId: 'beverage-2' },
+  { id: 'b3', name: 'Water Bottle', category: 'Beverages', price: 20, imageId: 'beverage-3' },
+  { id: 'b4', name: 'Sprite', category: 'Beverages', price: 40, imageId: 'beverage-4' },
+  { id: 'b5', name: 'Coca-Cola', category: 'Beverages', price: 40, imageId: 'beverage-5' },
+  { id: 'br1', name: 'Roti', category: 'Breads', price: 25, imageId: 'bread-1' },
+  { id: 'br2', name: 'Chapati', category: 'Breads', price: 20, imageId: 'bread-2' },
+  { id: 'br3', name: 'Tandoori Roti', category: 'Breads', price: 30, imageId: 'bread-3' },
 ];
 
 export const managers = [

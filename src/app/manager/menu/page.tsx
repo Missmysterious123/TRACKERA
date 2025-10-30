@@ -21,6 +21,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 const categories: MenuItemType['category'][] = [
   'Starters',
   'Main Course',
+  'Breads',
   'Desserts',
   'Beverages',
 ];
@@ -73,7 +74,7 @@ export default function MenuPage() {
         </Button>
       </PageHeader>
       <Tabs defaultValue="Starters" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5">
           {categories.map((category) => (
             <TabsTrigger key={category} value={category}>
               {category}
