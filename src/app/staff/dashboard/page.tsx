@@ -236,7 +236,7 @@ export default function StaffDashboard() {
       <div className="lg:col-span-2">
         <Tabs defaultValue={categories[0]} className="w-full">
           <TabsList
-            className={`grid w-full grid-cols-${categories.length}`}
+            className={`grid w-full grid-cols-2 sm:grid-cols-5`}
           >
             {categories.map((category) => (
               <TabsTrigger key={category} value={category}>
@@ -481,7 +481,7 @@ export default function StaffDashboard() {
                             {order.items.reduce((acc, i) => acc + i.quantity, 0)}
                           </TableCell>
                           <TableCell>
-                            {format(new Date(order.updatedAt), 'p')}
+                            {order.updatedAt ? format(new Date(order.updatedAt), 'p') : '-'}
                           </TableCell>
                           <TableCell className="space-x-2">
                              <Button variant="outline" size="sm" onClick={() => handleEditOrder(order)}>
@@ -580,3 +580,5 @@ export default function StaffDashboard() {
     </>
   );
 }
+
+    
