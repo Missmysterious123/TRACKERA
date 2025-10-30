@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChefHat, LogOut, Clock } from 'lucide-react';
+import { ChefHat, LogOut, Clock, ListOrdered } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function StaffHeader() {
@@ -20,10 +20,12 @@ export function StaffHeader() {
   return (
     <header className="flex items-center justify-between p-4 bg-card border-b">
       <div className="flex items-center gap-3">
-        <ChefHat className="h-8 w-8 text-primary" />
-        <h1 className="text-xl font-bold font-headline text-foreground">
-          Shivraj Restaurant
-        </h1>
+        <Link href="/staff/dashboard" className="flex items-center gap-3">
+          <ChefHat className="h-8 w-8 text-primary" />
+          <h1 className="text-xl font-bold font-headline text-foreground">
+            Trackera — Staff Dashboard
+          </h1>
+        </Link>
       </div>
       <div className="flex items-center gap-4">
         <div className="hidden sm:flex items-center gap-2 text-muted-foreground">
@@ -31,6 +33,11 @@ export function StaffHeader() {
           <span className="font-mono text-lg">{time}</span>
         </div>
         <Button variant="outline" asChild>
+           <Link href="/staff/orders">
+            <ListOrdered className="mr-2 h-4 w-4" /> View Active Orders
+          </Link>
+        </Button>
+        <Button variant="ghost" asChild>
           <Link href="/">
             <LogOut className="mr-2 h-4 w-4" /> Logout
           </Link>

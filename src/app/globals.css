@@ -8,19 +8,19 @@ body {
 
 @layer base {
   :root {
-    --background: 216 12% 96%; /* cool-gray-50 */
-    --foreground: 215 39% 18%; /* slate-800 */
+    --background: 220 13% 96%; /* #F3F4F6 */
+    --foreground: 222 47% 11%; /* #111827 */
     --card: 0 0% 100%;
-    --card-foreground: 215 39% 18%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 215 39% 18%;
-    --primary: 221 83% 53%; /* blue-600 */
+    --popover-foreground: 222 47% 11%;
+    --primary: 221 83% 53%; /* #2563EB */
     --primary-foreground: 0 0% 100%;
-    --secondary: 216 12% 93%;
-    --secondary-foreground: 215 39% 18%;
+    --secondary: 222 47% 11%; /* #111827 */
+    --secondary-foreground: 0 0% 100%;
     --muted: 216 12% 93%;
     --muted-foreground: 215 14% 43%;
-    --accent: 160 84% 39%; /* emerald-500 */
+    --accent: 158 84% 39%; /* #10B981 */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%; /* red-600 */
     --destructive-foreground: 0 0% 100%;
@@ -30,7 +30,7 @@ body {
     --input: 220 13% 91%;
     --ring: 221 83% 53%;
     --chart-1: 221 83% 53%;
-    --chart-2: 160 84% 39%;
+    --chart-2: 158 84% 39%;
     --chart-3: 38 92% 51%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
@@ -48,19 +48,19 @@ body {
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 216 12% 96%;
+    --background: 222 47% 11%; /* #111827 */
+    --foreground: 220 13% 96%; /* #F3F4F6 */
     --card: 222 47% 15%;
-    --card-foreground: 216 12% 96%;
+    --card-foreground: 220 13% 96%;
     --popover: 222 47% 11%;
-    --popover-foreground: 216 12% 96%;
-    --primary: 221 83% 63%;
+    --popover-foreground: 220 13% 96%;
+    --primary: 221 83% 63%; /* Lighter blue for dark mode */
     --primary-foreground: 0 0% 100%;
-    --secondary: 222 47% 18%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 220 13% 96%; /* #F3F4F6 */
+    --secondary-foreground: 222 47% 11%; /* #111827 */
     --muted: 222 47% 18%;
     --muted-foreground: 215 14% 60%;
-    --accent: 160 84% 45%;
+    --accent: 158 74% 45%; /* Lighter green for dark mode */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;

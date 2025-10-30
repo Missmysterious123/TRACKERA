@@ -1,27 +1,31 @@
 {
   "entities": {
-    "Restaurant": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Restaurant",
+    "User": {
+      "title": "User",
       "type": "object",
-      "description": "Represents a restaurant in the Trackera POS system.",
+      "description": "Represents a user in the system, either a manager or staff.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the restaurant."
+          "description": "Unique identifier for the user (e.g., MGR01, STF001)."
         },
         "name": {
           "type": "string",
-          "description": "Name of the restaurant."
+          "description": "Name of the user."
+        },
+        "role": {
+          "type": "string",
+          "description": "Role of the user.",
+          "enum": ["manager", "staff"]
+        },
+        "branchId": {
+          "type": "string",
+          "description": "The branch this user is associated with."
         }
       },
-      "required": [
-        "id",
-        "name"
-      ]
+      "required": ["id", "name", "role", "branchId"]
     },
     "Branch": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Branch",
       "type": "object",
       "description": "Represents a branch of a restaurant.",
@@ -30,163 +34,89 @@
           "type": "string",
           "description": "Unique identifier for the branch."
         },
-        "restaurantId": {
-          "type": "string",
-          "description": "Reference to the Restaurant this branch belongs to. (Relationship: Restaurant 1:N Branch)"
-        },
         "name": {
           "type": "string",
           "description": "Name of the branch."
         },
         "managerId": {
           "type": "string",
-          "description": "Reference to the Manager assigned to this branch. (Relationship: Manager 1:N Branch)"
+          "description": "Reference to the Manager assigned to this branch."
         }
       },
-      "required": [
-        "id",
-        "restaurantId",
-        "name",
-        "managerId"
-      ]
-    },
-    "Manager": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Manager",
-      "type": "object",
-      "description": "Represents a manager in the system.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the manager."
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the manager."
-        }
-      },
-      "required": [
-        "id",
-        "name"
-      ]
-    },
-    "Staff": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Staff",
-      "type": "object",
-      "description": "Represents a staff member in the system.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the staff member."
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the staff member."
-        },
-        "branchId": {
-          "type": "string",
-          "description": "Reference to the Branch this staff member is assigned to. (Relationship: Branch 1:N Staff)"
-        }
-      },
-      "required": [
-        "id",
-        "name",
-        "branchId"
-      ]
+      "required": ["id", "name", "managerId"]
     },
     "MenuCategory": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "MenuCategory",
       "type": "object",
       "description": "Represents a category of menu items (e.g., Starters, Main Course).",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the menu category."
-        },
         "name": {
           "type": "string",
           "description": "Name of the menu category."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              }
+            },
+            "required": ["name", "price"]
+          }
         }
       },
-      "required": [
-        "id",
-        "name"
-      ]
-    },
-    "MenuItem": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "MenuItem",
-      "type": "object",
-      "description": "Represents an item on the menu.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the menu item."
-        },
-        "categoryId": {
-          "type": "string",
-          "description": "Reference to the MenuCategory this item belongs to. (Relationship: MenuCategory 1:N MenuItem)"
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the menu item."
-        },
-        "price": {
-          "type": "number",
-          "description": "Price of the menu item."
-        },
-        "description": {
-          "type": "string",
-          "description": "Description of the menu item."
-        }
-      },
-      "required": [
-        "id",
-        "categoryId",
-        "name",
-        "price"
-      ]
+      "required": ["name", "items"]
     },
     "Order": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Order",
       "type": "object",
       "description": "Represents a customer order.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the order."
-        },
-        "tableNo": {
+        "table_no": {
           "type": "number",
           "description": "Table number for the order."
         },
-        "staffId": {
+        "staff_id": {
           "type": "string",
-          "description": "Reference to the Staff member who placed the order. (Relationship: Staff 1:N Order)"
+          "description": "Reference to the Staff member who placed the order."
         },
-        "branchId": {
+        "branch_id": {
           "type": "string",
-          "description": "Reference to the Branch where the order was placed. (Relationship: Branch 1:N Order)"
+          "description": "Reference to the Branch where the order was placed."
         },
         "items": {
           "type": "array",
           "description": "List of items in the order.",
           "items": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "item_name": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "number"
+              },
+              "price": {
+                "type": "number"
+              }
+            },
+            "required": ["item_name", "quantity", "price"]
           }
         },
         "subtotal": {
           "type": "number",
           "description": "Subtotal amount of the order."
         },
-        "gstRate": {
+        "gst_rate": {
           "type": "number",
           "description": "GST rate applied to the order."
         },
-        "gstAmount": {
+        "gst_amount": {
           "type": "number",
           "description": "GST amount for the order."
         },
@@ -201,258 +131,60 @@
         },
         "status": {
           "type": "string",
-          "description": "Status of the order (e.g., Active, Served, Cancelled)."
+          "description": "Status of the order (e.g., Active, Served, Cancelled).",
+          "enum": ["Active", "Served", "Cancelled"]
         }
       },
       "required": [
-        "id",
-        "tableNo",
-        "staffId",
-        "branchId",
+        "table_no",
+        "staff_id",
+        "branch_id",
         "items",
         "subtotal",
-        "gstRate",
-        "gstAmount",
+        "gst_rate",
+        "gst_amount",
         "total",
         "date",
         "status"
       ]
     },
-    "OrderItem": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "OrderItem",
-      "type": "object",
-      "description": "Represents an item within an order.  Links Order to MenuItem with quantity.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the order item."
-        },
-        "orderId": {
-          "type": "string",
-          "description": "Reference to the Order this item belongs to. (Relationship: Order 1:N OrderItem)"
-        },
-        "menuItemId": {
-          "type": "string",
-          "description": "Reference to the MenuItem in this order. (Relationship: MenuItem 1:N OrderItem)"
-        },
-        "quantity": {
-          "type": "number",
-          "description": "Quantity of the menu item in the order."
-        },
-        "price": {
-          "type": "number",
-          "description": "Price of the menu item at the time of order."
-        }
-      },
-      "required": [
-        "id",
-        "orderId",
-        "menuItemId",
-        "quantity",
-        "price"
-      ]
-    },
     "Table": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Table",
       "type": "object",
       "description": "Represents a table in the restaurant.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the table."
-        },
-        "branchId": {
-          "type": "string",
-          "description": "Reference to the Branch where the table is located. (Relationship: Branch 1:N Table)"
-        },
-        "tableNumber": {
+        "number": {
           "type": "number",
           "description": "The table number."
         },
         "status": {
           "type": "string",
-          "description": "Status of the table (Available, Active Order, Served)."
+          "description": "Status of the table (Available, Active Order, Served).",
+          "enum": ["Available", "Active Order", "Served"]
         }
       },
-      "required": [
-        "id",
-        "branchId",
-        "tableNumber",
-        "status"
-      ]
+      "required": ["number", "status"]
     }
   },
   "auth": {
-    "providers": [
-      "password",
-      "anonymous"
-    ]
+    "providers": ["password", "anonymous"]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/restaurants/{restaurantId}",
-        "definition": {
-          "entityName": "Restaurant",
-          "schema": {
-            "$ref": "#/backend/entities/Restaurant"
-          },
-          "description": "Stores restaurant information.  The `restaurantId` is used as the document ID.",
-          "params": [
-            {
-              "name": "restaurantId",
-              "description": "The unique identifier for the restaurant."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/restaurants/{restaurantId}/branches/{branchId}",
-        "definition": {
-          "entityName": "Branch",
-          "schema": {
-            "$ref": "#/backend/entities/Branch"
-          },
-          "description": "Stores branch information, linked to the parent restaurant. The `branchId` is used as the document ID.",
-          "params": [
-            {
-              "name": "restaurantId",
-              "description": "The unique identifier for the restaurant."
-            },
-            {
-              "name": "branchId",
-              "description": "The unique identifier for the branch."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/branches/{branchId}/staff/{staffId}",
-        "definition": {
-          "entityName": "Staff",
-          "schema": {
-            "$ref": "#/backend/entities/Staff"
-          },
-          "description": "Stores staff data linked to the branch.  The `branchId` is also denormalized into the `staff` document to allow listing of `staff` without requiring a `get()` call on the branch.",
-          "params": [
-            {
-              "name": "branchId",
-              "description": "The unique identifier for the branch."
-            },
-            {
-              "name": "staffId",
-              "description": "The unique identifier for the staff member."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/branches/{branchId}/menu_categories/{menuCategoryId}",
-        "definition": {
-          "entityName": "MenuCategory",
-          "schema": {
-            "$ref": "#/backend/entities/MenuCategory"
-          },
-          "description": "Stores menu categories, linked to each branch.",
-          "params": [
-            {
-              "name": "branchId",
-              "description": "The unique identifier for the branch."
-            },
-            {
-              "name": "menuCategoryId",
-              "description": "The unique identifier for the menu category."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/branches/{branchId}/menu_items/{menuItemId}",
-        "definition": {
-          "entityName": "MenuItem",
-          "schema": {
-            "$ref": "#/backend/entities/MenuItem"
-          },
-          "description": "Stores menu items, linked to their category and branch.",
-          "params": [
-            {
-              "name": "branchId",
-              "description": "The unique identifier for the branch."
-            },
-            {
-              "name": "menuItemId",
-              "description": "The unique identifier for the menu item."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/branches/{branchId}/orders/{orderId}",
-        "definition": {
-          "entityName": "Order",
-          "schema": {
-            "$ref": "#/backend/entities/Order"
-          },
-          "description": "Stores order information for each branch. `branchId` and `staffId` are denormalized into each order to allow for filtering orders by branch or staff without requiring additional `get()` calls in security rules.",
-          "params": [
-            {
-              "name": "branchId",
-              "description": "The unique identifier for the branch."
-            },
-            {
-              "name": "orderId",
-              "description": "The unique identifier for the order."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/branches/{branchId}/orders/{orderId}/order_items/{orderItemId}",
-        "definition": {
-          "entityName": "OrderItem",
-          "schema": {
-            "$ref": "#/backend/entities/OrderItem"
-          },
-          "description": "Stores order item information, linked to an order.",
-          "params": [
-            {
-              "name": "branchId",
-              "description": "The unique identifier for the branch."
-            },
-            {
-              "name": "orderId",
-              "description": "The unique identifier for the order."
-            },
-            {
-              "name": "orderItemId",
-              "description": "The unique identifier for the order item."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/branches/{branchId}/tables/{tableId}",
-        "definition": {
-          "entityName": "Table",
-          "schema": {
-            "$ref": "#/backend/entities/Table"
-          },
-          "description": "Stores table information linked to the branch. This allows us to easily query tables by branch.",
-          "params": [
-            {
-              "name": "branchId",
-              "description": "The unique identifier for the branch."
-            },
-            {
-              "name": "tableId",
-              "description": "The unique identifier for the table."
-            }
-          ]
-        }
-      }
-    ],
-    "reasoning": "The Firestore data structure is designed to support a Point of Sale (POS) system with a focus on restaurants and their branches. The structure emphasizes authorization independence through denormalization, ensuring secure and scalable operations.  It uses path-based ownership where appropriate and membership maps for collaborative data access.\n\nThe key collections and their purpose are:\n\n*   **/restaurants/{restaurantId}**: Stores restaurant-specific data.\n*   **/restaurants/{restaurantId}/branches/{branchId}**: Stores branch-specific data, linked to the parent restaurant. Access is controlled at the branch level.\n*   **/branches/{branchId}/staff/{staffId}**: Stores staff data linked to the branch. This path enables easy management of staff and their association with specific branches.  `branchId` is also denormalized into the `staff` document to allow listing of `staff` without requiring a `get()` call on the branch.\n*   **/branches/{branchId}/menu_categories/{menuCategoryId}**: Stores menu categories, linked to each branch.\n*   **/branches/{branchId}/menu_items/{menuItemId}**: Stores menu items, linked to their category and branch.\n*   **/branches/{branchId}/orders/{orderId}**: Stores order information for each branch. `branchId` and `staffId` are denormalized into each order to allow for filtering orders by branch or staff without requiring additional `get()` calls in security rules.\n*   **/branches/{branchId}/tables/{tableId}**: Stores table information linked to the branch.  This allows us to easily query tables by branch.\n\nThis structure allows for easy querying of data related to a specific branch or restaurant, while also allowing secure listing of staff, orders and menu items associated with a branch.  The explicit path structure enables simple and robust security rules, making it easy to debug and maintain the system."
+    "/staff/{staffId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores staff user information."
+    },
+    "/branches/{branchId}": {
+      "schema": { "$ref": "#/entities/Branch" },
+      "description": "Stores branch information."
+    },
+    "/menu/{menuId}": {
+      "schema": { "$ref": "#/entities/MenuCategory" },
+      "description": "Stores menu information, with each document representing a category."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Stores customer orders."
+    }
   }
 }
