@@ -20,9 +20,9 @@ import {
 } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { Plus, Minus, CheckCircle, CircleDollarSign, NotebookPen } from 'lucide-react';
+import { Plus, Minus, CircleDollarSign, NotebookPen } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useCollection, useFirebase, addDocumentNonBlocking } from '@/firebase';
+import { useCollection, useFirebase, addDocumentNonBlocking, useMemoFirebase } from '@/firebase';
 import { collection, serverTimestamp } from 'firebase/firestore';
 
 interface MenuItem {
@@ -51,7 +51,7 @@ export default function NewOrderPage() {
   const { toast } = useToast();
   const { firestore, user } = useFirebase();
 
-  const menuCollectionRef = useMemo(
+  const menuCollectionRef = useMemoFirebase(
     () => firestore ? collection(firestore, 'menu') : null,
     [firestore]
   );
@@ -121,7 +121,6 @@ export default function NewOrderPage() {
     toast({
       title: 'Order Confirmed!',
       description: `Order for Table ${tableNumber} has been placed.`,
-      action: <CheckCircle className="text-green-500" />,
     });
 
     setOrderItems([]);
