@@ -8,23 +8,23 @@ body {
 
 @layer base {
   :root {
-    --background: 220 13% 96%; /* #F3F4F6 */
+    --background: 220 13% 96%; /* #F3F4F6 - Cool Gray */
     --foreground: 222 47% 11%; /* #111827 */
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 221 83% 53%; /* #2563EB */
+    --primary: 221 83% 53%; /* #2563EB - Rich Blue */
     --primary-foreground: 0 0% 100%;
-    --secondary: 222 47% 11%; /* #111827 */
+    --secondary: 222 47% 11%; /* #111827 - Dark Charcoal */
     --secondary-foreground: 0 0% 100%;
     --muted: 216 12% 93%;
     --muted-foreground: 215 14% 43%;
-    --accent: 158 84% 39%; /* #10B981 */
+    --accent: 158 84% 39%; /* #10B981 - Emerald Green */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 51%; /* red-600 */
+    --destructive: 355 78% 52%; /* A fitting red for destructive actions */
     --destructive-foreground: 0 0% 100%;
-    --warning: 38 92% 51%; /* amber-500 */
+    --warning: 38 92% 51%; 
     --warning-foreground: 215 39% 18%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChefHat, LogOut, Clock, ListOrdered } from 'lucide-react';
+import { ChefHat, LogOut, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function StaffHeader() {
@@ -32,11 +32,6 @@ export function StaffHeader() {
           <Clock className="h-5 w-5" />
           <span className="font-mono text-lg">{time}</span>
         </div>
-        <Button variant="outline" asChild>
-           <Link href="/staff/orders">
-            <ListOrdered className="mr-2 h-4 w-4" /> View Active Orders
-          </Link>
-        </Button>
         <Button variant="ghost" asChild>
           <Link href="/">
             <LogOut className="mr-2 h-4 w-4" /> Logout

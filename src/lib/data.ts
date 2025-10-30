@@ -14,23 +14,13 @@ export const branches = [
 export type MenuItem = {
   id: string;
   name: string;
-  category: 'Starters' | 'Main Course' | 'Desserts' | 'Beverages' | 'Breads';
   price: number;
 };
 
 export const menuItems: MenuItem[] = [
-  { id: 's3', name: 'Masala Papad', category: 'Starters', price: 50 },
-  { id: 's4', name: 'Papad', category: 'Starters', price: 30 },
-  { id: 'm3', name: 'Akha Masur (Garlic)', category: 'Main Course', price: 220 },
-  { id: 'm4', name: 'Akha Masur (Jeera)', category: 'Main Course', price: 220 },
-  { id: 'm5', name: 'Akha Masur (Green Chilli)', category: 'Main Course', price: 220 },
-  { id: 'd1', name: 'Gulab Jamun', category: 'Desserts', price: 120 },
-  { id: 'b3', name: 'Water Bottle', category: 'Beverages', price: 20 },
-  { id: 'b4', name: 'Sprite', category: 'Beverages', price: 40 },
-  { id: 'b5', name: 'Coca-Cola', category: 'Beverages', price: 40 },
-  { id: 'br1', name: 'Roti', category: 'Breads', price: 25 },
-  { id: 'br2', name: 'Chapati', category: 'Breads', price: 20 },
-  { id: 'br3', name: 'Tandoori Roti', category: 'Breads', price: 30 },
+  { id: 'item-1', name: 'Pizza', price: 200 },
+  { id: 'item-2', name: 'Burger', price: 150 },
+  { id: 'item-3', name: 'Pasta', price: 180 },
 ];
 
 export const managers = [
@@ -48,51 +38,6 @@ export const staffMembers: StaffMember[] = [
   { id: 'STF001', name: 'Ramesh Kumar', branchId: 'satara' },
   { id: 'STF002', name: 'Priya Singh', branchId: 'satara' },
   { id: 'STF003', name: 'Amit Patel', branchId: 'karad' },
-];
-
-export type Order = {
-  id: string;
-  tableNumber: string;
-  items: { menuItem: MenuItem; quantity: number }[];
-  total: number;
-  status: 'Active' | 'Served' | 'Cancelled';
-  timestamp: Date;
-};
-
-export const orders: Order[] = [
-  {
-    id: 'ORD001',
-    tableNumber: '5',
-    items: [
-      { menuItem: menuItems[0], quantity: 2 },
-      { menuItem: menuItems[1], quantity: 1 },
-    ],
-    total: 136.5,
-    status: 'Active',
-    timestamp: new Date(new Date().setDate(new Date().getDate() - 1)),
-  },
-  {
-    id: 'ORD002',
-    tableNumber: '2',
-    items: [
-      { menuItem: menuItems[2], quantity: 1 },
-      { menuItem: menuItems[3], quantity: 2 },
-    ],
-    total: 693,
-    status: 'Served',
-    timestamp: new Date(new Date().setDate(new Date().getDate() - 2)),
-  },
-  {
-    id: 'ORD003',
-    tableNumber: '8',
-    items: [
-      { menuItem: menuItems[4], quantity: 1 },
-      { menuItem: menuItems[5], quantity: 1 },
-    ],
-    total: 357,
-    status: 'Active',
-    timestamp: new Date(),
-  },
 ];
 
 export const revenueData = [
