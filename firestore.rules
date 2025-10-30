@@ -1,0 +1,186 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Allows access to restaurant documents. Currently allows public read, but only authenticated writes.
+     * @path /restaurants/{restaurantId}
+     * @allow get, list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny get: if false;
+     * @deny list: if false;
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows all authenticated users to create/update restaurants. Read is public.
+     */
+    match /restaurants/{restaurantId} {
+      allow get, list: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    /**
+     * @description Allows access to branch documents within a restaurant. Currently allows public read, but only authenticated writes.
+     * @path /restaurants/{restaurantId}/branches/{branchId}
+     * @allow get, list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny get: if false;
+     * @deny list: if false;
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows all authenticated users to create/update branches within a restaurant. Read is public.
+     */
+    match /restaurants/{restaurantId}/branches/{branchId} {
+      allow get, list: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    /**
+     * @description Allows staff to manage their own data within their assigned branch.
+     * @path /branches/{branchId}/staff/{staffId}
+     * @allow get: if isStaffInBranch(branchId, staffId);
+     * @allow list: if true;
+     * @allow create: if request.auth.uid == staffId;
+     * @allow update: if isExistingStaffInBranch(branchId, staffId);
+     * @allow delete: if isExistingStaffInBranch(branchId, staffId);
+     * @deny get: if !isStaffInBranch(branchId, staffId);
+     * @deny list: if false;
+     * @deny create: if request.auth.uid != staffId;
+     * @deny update: if !isExistingStaffInBranch(branchId, staffId);
+     * @deny delete: if !isExistingStaffInBranch(branchId, staffId);
+     * @principle Enforces staff ownership and branch affiliation for data access.
+     */
+    match /branches/{branchId}/staff/{staffId} {
+      allow get: if isStaffInBranch(branchId, staffId);
+      allow list: if true;
+      allow create: if request.auth.uid == staffId;
+      allow update: if isExistingStaffInBranch(branchId, staffId);
+      allow delete: if isExistingStaffInBranch(branchId, staffId);
+    }
+
+    /**
+     * @description Allows access to menu category documents within a branch.
+     * @path /branches/{branchId}/menu_categories/{menuCategoryId}
+     * @allow get, list: if true;
+     * @allow create: if isStaffInBranch(branchId, request.auth.uid);
+     * @allow update: if isStaffInBranch(branchId, request.auth.uid);
+     * @allow delete: if isStaffInBranch(branchId, request.auth.uid);
+     * @deny get: if false;
+     * @deny list: if false;
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows public read, but only authenticated writes within a branch.
+     */
+    match /branches/{branchId}/menu_categories/{menuCategoryId} {
+      allow get, list: if true;
+      allow create, update, delete: if isStaffInBranch(branchId, request.auth.uid);
+    }
+
+    /**
+     * @description Allows access to menu item documents within a branch.
+     * @path /branches/{branchId}/menu_items/{menuItemId}
+     * @allow get, list: if true;
+     * @allow create: if isStaffInBranch(branchId, request.auth.uid);
+     * @allow update: if isStaffInBranch(branchId, request.auth.uid);
+     * @allow delete: if isStaffInBranch(branchId, request.auth.uid);
+     * @deny get: if false;
+     * @deny list: if false;
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Allows public read, but only authenticated writes within a branch.
+     */
+    match /branches/{branchId}/menu_items/{menuItemId} {
+      allow get, list: if true;
+      allow create, update, delete: if isStaffInBranch(branchId, request.auth.uid);
+    }
+
+    /**
+     * @description Allows staff to manage orders within their assigned branch.
+     * @path /branches/{branchId}/orders/{orderId}
+     * @allow get: if isStaffInBranch(branchId, resource.data.staffId);
+     * @allow list: if true;
+     * @allow create: if request.auth.uid == request.resource.data.staffId && request.resource.data.branchId == branchId;
+     * @allow update: if isExistingStaffInBranch(branchId, resource.data.staffId);
+     * @allow delete: if isExistingStaffInBranch(branchId, resource.data.staffId);
+     * @deny get: if !isStaffInBranch(branchId, resource.data.staffId);
+     * @deny list: if false;
+     * @deny create: if request.resource.data.staffId != request.auth.uid || request.resource.data.branchId != branchId;
+     * @deny update: if !isExistingStaffInBranch(branchId, resource.data.staffId);
+     * @deny delete: if !isExistingStaffInBranch(branchId, resource.data.staffId);
+     * @principle Enforces staff ownership and branch affiliation for order management.
+     */
+    match /branches/{branchId}/orders/{orderId} {
+      allow get: if isStaffInBranch(branchId, resource.data.staffId);
+      allow list: if true;
+      allow create: if request.auth.uid == request.resource.data.staffId && request.resource.data.branchId == branchId;
+      allow update: if isStaffInBranch(branchId, resource.data.staffId);
+      allow delete: if isStaffInBranch(branchId, resource.data.staffId);
+    }
+
+    /**
+     * @description Allows access to order item documents within an order.
+     * @path /branches/{branchId}/orders/{orderId}/order_items/{orderItemId}
+     * @allow get: if isStaffInBranch(branchId, get(/databases/$(database)/documents/branches/$(branchId)/orders/$(orderId)).data.staffId);
+     * @allow list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny get: if !isStaffInBranch(branchId, get(/databases/$(database)/documents/branches/$(branchId)/orders/$(orderId)).data.staffId);
+     * @deny list: if false;
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Restricts access to order items to staff within the associated branch.
+     */
+    match /branches/{branchId}/orders/{orderId}/order_items/{orderItemId} {
+      allow get: if isStaffInBranch(branchId, get(/databases/$(database)/documents/branches/$(branchId)/orders/$(orderId)).data.staffId);
+      allow list: if true;
+      allow create, update, delete: if isStaffInBranch(branchId, request.auth.uid);
+    }
+
+    /**
+     * @description Allows access to table documents within a branch.
+     * @path /branches/{branchId}/tables/{tableId}
+     * @allow get: if isStaffInBranch(branchId, request.auth.uid);
+     * @allow list: if true;
+     * @allow create: if isSignedIn();
+     * @allow update: if isSignedIn();
+     * @allow delete: if isSignedIn();
+     * @deny get: if !isStaffInBranch(branchId, request.auth.uid);
+     * @deny list: if false;
+     * @deny create: if false;
+     * @deny update: if false;
+     * @deny delete: if false;
+     * @principle Restricts access to tables to staff within the associated branch.
+     */
+    match /branches/{branchId}/tables/{tableId} {
+      allow get: if isStaffInBranch(branchId, request.auth.uid);
+      allow list: if true;
+      allow create, update, delete: if isStaffInBranch(branchId, request.auth.uid);
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isStaffInBranch(branchId, staffId) {
+      return isSignedIn() && exists(/databases/$(database)/documents/branches/$(branchId)/staff/$(staffId));
+    }
+
+     function isExistingStaffInBranch(branchId, staffId) {
+       return isStaffInBranch(branchId, staffId) && get(/databases/$(database)/documents/branches/$(branchId)/staff/$(staffId)).data != null;
+     }
+  }
+}
