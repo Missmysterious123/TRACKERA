@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import * as XLSX from 'xlsx';
 import { PageHeader } from '@/components/app/page-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,7 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { PlusCircle, Edit, Trash2 } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, FileDown } from 'lucide-react';
 import { menuItems as initialMenuItems, type MenuItem as MenuItemType } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 
@@ -136,6 +137,16 @@ export default function MenuPage() {
     });
   };
 
+  const handleExport = () => {
+    const worksheet = XLSX.utils.json_to_sheet(currentMenuItems);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Menu");
+    XLSX.writeFile(workbook, "menu.xlsx");
+    toast({
+      title: 'Exported!',
+      description: 'Menu data has been exported to menu.xlsx.',
+    });
+  };
 
   return (
     <>
@@ -143,76 +154,82 @@ export default function MenuPage() {
         title="Menu Management"
         description="Add, update, and manage your restaurant's menu items."
       >
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <PlusCircle className="mr-2 h-4 w-4" /> Add New Item
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Menu Item</DialogTitle>
-              <DialogDescription>
-                Enter the details for the new item to add it to your menu.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  name="name"
-                  value={newItem.name}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                  placeholder="e.g., Veg Biryani"
-                />
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExport}>
+            <FileDown className="mr-2 h-4 w-4" />
+            Export to Excel
+          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add New Item
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add New Menu Item</DialogTitle>
+                <DialogDescription>
+                  Enter the details for the new item to add it to your menu.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    value={newItem.name}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    placeholder="e.g., Veg Biryani"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="price" className="text-right">
+                    Price (INR)
+                  </Label>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="number"
+                    value={newItem.price}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    placeholder="e.g., 250"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="category" className="text-right">
+                    Category
+                  </Label>
+                  <Select
+                    value={newItem.category}
+                    onValueChange={handleCategoryChange}
+                  >
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>
+                          {cat}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="price" className="text-right">
-                  Price (INR)
-                </Label>
-                <Input
-                  id="price"
-                  name="price"
-                  type="number"
-                  value={newItem.price}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                  placeholder="e.g., 250"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="category" className="text-right">
-                  Category
-                </Label>
-                <Select
-                  value={newItem.category}
-                  onValueChange={handleCategoryChange}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {cat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button onClick={handleAddItem}>Add Item</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button onClick={handleAddItem}>Add Item</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </PageHeader>
       <Tabs defaultValue="Starters" className="w-full">
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5">

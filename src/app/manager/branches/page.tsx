@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import * as XLSX from 'xlsx';
 import { PageHeader } from '@/components/app/page-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -30,7 +31,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlusCircle, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
+import { PlusCircle, MoreHorizontal, Edit, Trash2, FileDown } from 'lucide-react';
 import { branches as initialBranches } from '@/lib/data';
 import {
   DropdownMenu,
@@ -120,6 +121,17 @@ export default function BranchesPage() {
       handleAddBranch();
     }
   }
+
+  const handleExport = () => {
+    const worksheet = XLSX.utils.json_to_sheet(branches);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Branches");
+    XLSX.writeFile(workbook, "branches.xlsx");
+    toast({
+      title: 'Exported!',
+      description: 'Branch data has been exported to branches.xlsx.',
+    });
+  };
   
   return (
     <>
@@ -127,49 +139,55 @@ export default function BranchesPage() {
         title="Branches"
         description="Manage your restaurant's branches here."
       >
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={openAddDialog}>
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Branch
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{editingBranch ? 'Edit Branch' : 'Add New Branch'}</DialogTitle>
-              <DialogDescription>
-                {editingBranch ? 'Update the details for this branch.' : 'Enter the details for the new branch.'}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="branch-name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="branch-name"
-                  value={editingBranch ? editingBranch.name : newBranchName}
-                  onChange={(e) => {
-                    if(editingBranch) {
-                      setEditingBranch({...editingBranch, name: e.target.value});
-                    } else {
-                      setNewBranchName(e.target.value);
-                    }
-                  }}
-                  className="col-span-3"
-                  placeholder="e.g., Downtown"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                 <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button onClick={handleDialogSubmit}>
-                {editingBranch ? 'Save Changes' : 'Add Branch'}
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExport}>
+            <FileDown className="mr-2 h-4 w-4" />
+            Export to Excel
+          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={openAddDialog}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Branch
               </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{editingBranch ? 'Edit Branch' : 'Add New Branch'}</DialogTitle>
+                <DialogDescription>
+                  {editingBranch ? 'Update the details for this branch.' : 'Enter the details for the new branch.'}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="branch-name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="branch-name"
+                    value={editingBranch ? editingBranch.name : newBranchName}
+                    onChange={(e) => {
+                      if(editingBranch) {
+                        setEditingBranch({...editingBranch, name: e.target.value});
+                      } else {
+                        setNewBranchName(e.target.value);
+                      }
+                    }}
+                    className="col-span-3"
+                    placeholder="e.g., Downtown"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button onClick={handleDialogSubmit}>
+                  {editingBranch ? 'Save Changes' : 'Add Branch'}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </PageHeader>
       <Card>
         <CardHeader>

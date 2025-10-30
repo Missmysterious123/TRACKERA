@@ -1,3 +1,6 @@
+'use client';
+
+import * as XLSX from 'xlsx';
 import { PageHeader } from '@/components/app/page-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +20,7 @@ import {
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { PlusCircle, MoreHorizontal } from 'lucide-react';
+import { PlusCircle, MoreHorizontal, FileDown } from 'lucide-react';
 import { staffMembers, branches } from '@/lib/data';
 import {
   DropdownMenu,
@@ -25,17 +28,43 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/hooks/use-toast';
 
 export default function StaffPage() {
+  const { toast } = useToast();
+
+  const handleExport = () => {
+    const dataToExport = staffMembers.map(staff => ({
+      'Staff ID': staff.id,
+      'Name': staff.name,
+      'Branch': branches.find(b => b.id === staff.branchId)?.name || 'N/A'
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Staff");
+    XLSX.writeFile(workbook, "staff_data.xlsx");
+    toast({
+      title: 'Exported!',
+      description: 'Staff data has been exported to staff_data.xlsx.',
+    });
+  };
+
   return (
     <>
       <PageHeader
         title="Staff Management"
         description="Manage your team of staff members across all branches."
       >
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" /> Add Staff
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExport}>
+            <FileDown className="mr-2 h-4 w-4" />
+            Export to Excel
+          </Button>
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" /> Add Staff
+          </Button>
+        </div>
       </PageHeader>
       <Card>
         <CardHeader>
