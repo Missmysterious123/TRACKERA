@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Plus,
   Minus,
@@ -11,7 +11,9 @@ import {
   ChevronRight,
   PlusCircle,
   Pencil,
+  Printer,
 } from 'lucide-react';
+import { useReactToPrint } from 'react-to-print';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -41,15 +43,16 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { Receipt } from '@/components/app/receipt';
 
 type OrderItem = {
   item: MenuItem;
   quantity: number;
 };
 
-type OrderStatus = 'draft' | 'active' | 'completed';
+export type OrderStatus = 'draft' | 'active' | 'completed';
 
-type Order = {
+export type Order = {
   id: string;
   tableNumber: number;
   items: OrderItem[];
@@ -60,7 +63,7 @@ type Order = {
 };
 
 const tables = Array.from({ length: 10 }, (_, i) => i + 1);
-const GST_RATE = 0.05;
+export const GST_RATE = 0.05;
 
 const categories = [...new Set(menuItems.map((item) => item.category))];
 
@@ -73,6 +76,19 @@ export default function StaffDashboard() {
   const [isClient, setIsClient] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('take-order');
   const [currentView, setCurrentView] = useState<View>('grid');
+  const [orderToPrint, setOrderToPrint] = useState<Order | null>(null);
+  const receiptRef = useRef<HTMLDivElement>(null);
+
+  const handlePrint = useReactToPrint({
+    content: () => receiptRef.current,
+    onAfterPrint: () => setOrderToPrint(null),
+  });
+
+  useEffect(() => {
+    if (orderToPrint) {
+      handlePrint();
+    }
+  }, [orderToPrint, handlePrint]);
 
   useEffect(() => {
     setIsClient(true);
@@ -171,7 +187,7 @@ export default function StaffDashboard() {
   };
   
   const handleConfirmOrder = () => {
-    if (!currentOrderForTable) return;
+    if (!currentOrderForTable || currentOrderForTable.items.length === 0) return;
     setOrders(prev => prev.map(o => o.id === currentOrderForTable.id ? {...o, status: 'active', updatedAt: Date.now() } : o));
     setCurrentView('grid');
     setSelectedTable(null);
@@ -361,7 +377,7 @@ export default function StaffDashboard() {
               <Separator className="my-1" />
               <div className="grid grid-cols-2 gap-2 w-full">
                 {currentOrderForTable?.status === 'draft' ? (
-                  <Button size="lg" className="w-full col-span-2" onClick={handleConfirmOrder}>
+                  <Button size="lg" className="w-full col-span-2" onClick={handleConfirmOrder} disabled={currentOrderItems.length === 0}>
                     Confirm Order
                   </Button>
                 ) : (
@@ -372,7 +388,7 @@ export default function StaffDashboard() {
                 <Button
                   size="lg"
                   variant="destructive"
-                  className="w-full"
+                  className={cn("w-full", currentOrderForTable?.status !== 'draft' && 'col-span-2')}
                   onClick={handleResetOrder}
                 >
                   <Trash2 className="mr-2 h-5 w-5" /> Reset
@@ -419,6 +435,13 @@ export default function StaffDashboard() {
 
   return (
     <>
+      <div className="hidden">
+        {orderToPrint && (
+            <div ref={receiptRef}>
+                <Receipt order={orderToPrint} />
+            </div>
+        )}
+      </div>
       <PageHeader
         title="POS Dashboard"
         description="Manage table orders, active bills, and completed payments."
@@ -524,6 +547,7 @@ export default function StaffDashboard() {
                     <TableHead>Items</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Completed At</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -561,12 +585,17 @@ export default function StaffDashboard() {
                               ? format(new Date(order.completedAt), 'p')
                               : '-'}
                           </TableCell>
+                          <TableCell className="text-right">
+                             <Button variant="outline" size="sm" onClick={() => setOrderToPrint(order)}>
+                                <Printer className="mr-2 h-4 w-4"/> Print Receipt
+                             </Button>
+                          </TableCell>
                         </TableRow>
                       );
                     })
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center h-24">
+                      <TableCell colSpan={6} className="text-center h-24">
                         No completed orders yet.
                       </TableCell>
                     </TableRow>
@@ -580,5 +609,3 @@ export default function StaffDashboard() {
     </>
   );
 }
-
-    
