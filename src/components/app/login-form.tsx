@@ -1,6 +1,7 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useOptimistic } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, KeyRound, Loader2 } from 'lucide-react';
@@ -42,7 +43,7 @@ function SubmitButton({ userType }: { userType: 'manager' | 'staff' }) {
 }
 
 export function LoginForm({ userType, formAction }: LoginFormProps) {
-  const [state, action] = useFormState(formAction, undefined);
+  const [state, action] = useActionState(formAction, undefined);
   const searchParams = useSearchParams();
   const branchId = searchParams.get('branch');
   const branchName =
