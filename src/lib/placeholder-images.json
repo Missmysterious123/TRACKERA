@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "starter-1",
+      "description": "Paneer Tikka Starter",
+      "imageUrl": "https://images.unsplash.com/photo-1690369642866-3f9143af0a89?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwYW5lZXIlMjB0aWtrYXxlbnwwfHx8fDE3NjE3OTYyODF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "paneer tikka"
+    },
+    {
+      "id": "starter-2",
+      "description": "Vegetable Spring Rolls",
+      "imageUrl": "https://images.unsplash.com/photo-1679310290259-78d9eaa32700?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcHJpbmclMjByb2xsc3xlbnwwfHx8fDE3NjE3NDU2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spring rolls"
+    },
+    {
+      "id": "main-1",
+      "description": "Dal Makhani",
+      "imageUrl": "https://picsum.photos/seed/main1/400/300",
+      "imageHint": "dal makhani"
+    },
+    {
+      "id": "main-2",
+      "description": "Shahi Paneer",
+      "imageUrl": "https://images.unsplash.com/photo-1690401767645-595de0e0e5f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzaGFoaSUyMHBhbmVlcnxlbnwwfHx8fDE3NjE3OTYyODF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "shahi paneer"
+    },
+    {
+      "id": "dessert-1",
+      "description": "Gulab Jamun",
+      "imageUrl": "https://images.unsplash.com/photo-1680993032090-1ef7ea9b51e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxndWxhYiUyMGphbXVufGVufDB8fHx8MTc2MTczNTg3M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gulab jamun"
+    },
+    {
+      "id": "dessert-2",
+      "description": "Chocolate Brownie",
+      "imageUrl": "https://images.unsplash.com/photo-1642423927418-fdac74328f85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjaG9jb2xhdGUlMjBicm93bmllfGVufDB8fHx8MTc2MTc5NjI4MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chocolate brownie"
+    },
+    {
+      "id": "beverage-1",
+      "description": "Fresh Lime Soda",
+      "imageUrl": "https://images.unsplash.com/photo-1598556482684-044135065fad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bGltZSUyMHNvZGF8ZW58MHx8fHwxNzYxNzk2MjgxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "lime soda"
+    },
+    {
+      "id": "beverage-2",
+      "description": "Iced Tea",
+      "imageUrl": "https://images.unsplash.com/photo-1499638673689-79a0b5115d87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpY2VkJTIwdGVhfGVufDB8fHx8MTc2MTcwMzIxOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "iced tea"
+    }
+  ]
 }
