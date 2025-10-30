@@ -481,7 +481,7 @@ export default function StaffDashboard() {
                             {order.items.reduce((acc, i) => acc + i.quantity, 0)}
                           </TableCell>
                           <TableCell>
-                            {format(order.updatedAt, 'p')}
+                            {format(new Date(order.updatedAt), 'p')}
                           </TableCell>
                           <TableCell className="space-x-2">
                              <Button variant="outline" size="sm" onClick={() => handleEditOrder(order)}>
@@ -558,7 +558,7 @@ export default function StaffDashboard() {
                           </TableCell>
                           <TableCell>
                             {order.completedAt
-                              ? format(order.completedAt, 'p')
+                              ? format(new Date(order.completedAt), 'p')
                               : '-'}
                           </TableCell>
                         </TableRow>
