@@ -1,3 +1,4 @@
+
 export const branches = [
   { id: 'satara', name: 'Satara' },
   { id: 'karad', name: 'Karad' },
@@ -19,12 +20,8 @@ export type MenuItem = {
 };
 
 export const menuItems: MenuItem[] = [
-  { id: 's1', name: 'Paneer Tikka', category: 'Starters', price: 250, imageId: 'starter-1' },
-  { id: 's2', name: 'Spring Rolls', category: 'Starters', price: 180, imageId: 'starter-2' },
   { id: 's3', name: 'Masala Papad', category: 'Starters', price: 50, imageId: 'starter-3' },
   { id: 's4', name: 'Papad', category: 'Starters', price: 30, imageId: 'starter-4' },
-  { id: 'm1', name: 'Dal Makhani', category: 'Main Course', price: 300, imageId: 'main-1' },
-  { id: 'm2', name: 'Shahi Paneer', category: 'Main Course', price: 350, imageId: 'main-2' },
   { id: 'm3', name: 'Akha Masur (Garlic)', category: 'Main Course', price: 220, imageId: 'main-3' },
   { id: 'm4', name: 'Akha Masur (Jeera)', category: 'Main Course', price: 220, imageId: 'main-4' },
   { id: 'm5', name: 'Akha Masur (Green Chilli)', category: 'Main Course', price: 220, imageId: 'main-5' },
@@ -71,8 +68,8 @@ export const orders: Order[] = [
     id: 'ORD001',
     tableNumber: '5',
     items: [
-      { menuItem: menuItems[2], quantity: 2 },
-      { menuItem: menuItems[3], quantity: 1 },
+      { menuItem: menuItems[0], quantity: 2 },
+      { menuItem: menuItems[1], quantity: 1 },
     ],
     total: 950,
     status: 'Pending',
@@ -83,7 +80,7 @@ export const orders: Order[] = [
     tableNumber: '2',
     items: [
       { menuItem: menuItems[0], quantity: 1 },
-      { menuItem: menuItems[6], quantity: 2 },
+      { menuItem: menuItems[2], quantity: 2 },
     ],
     total: 410,
     status: 'Served',
@@ -93,8 +90,8 @@ export const orders: Order[] = [
     id: 'ORD003',
     tableNumber: '8',
     items: [
-      { menuItem: menuItems[4], quantity: 2 },
-      { menuItem: menuItems[5], quantity: 1 },
+      { menuItem: menuItems[1], quantity: 2 },
+      { menuItem: menuItems[4], quantity: 1 },
     ],
     total: 390,
     status: 'Pending',
