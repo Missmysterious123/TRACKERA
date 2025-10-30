@@ -1,7 +1,13 @@
 export const branches = [
-  { id: 'main-street', name: 'Main Street' },
-  { id: 'downtown', name: 'Downtown' },
-  { id: 'riverside', name: 'Riverside' },
+  { id: 'satara', name: 'Satara' },
+  { id: 'karad', name: 'Karad' },
+  { id: 'kolhapur', name: 'Kolhapur' },
+  { id: 'katraj', name: 'Katraj' },
+  { id: 'wai', name: 'Wai' },
+  { id: 'shirwal', name: 'Shirwal' },
+  { id: 'islampur', name: 'Islampur' },
+  { id: 'wagholi', name: 'Wagholi' },
+  { id: 'vidyanagar', name: 'Vidyanagar' },
 ];
 
 export type MenuItem = {
@@ -35,9 +41,9 @@ export type StaffMember = {
 };
 
 export const staffMembers: StaffMember[] = [
-  { id: 'STF001', name: 'Ramesh Kumar', branchId: 'main-street' },
-  { id: 'STF002', name: 'Priya Singh', branchId: 'main-street' },
-  { id: 'STF003', name: 'Amit Patel', branchId: 'downtown' },
+  { id: 'STF001', name: 'Ramesh Kumar', branchId: 'satara' },
+  { id: 'STF002', name: 'Priya Singh', branchId: 'satara' },
+  { id: 'STF003', name: 'Amit Patel', branchId: 'karad' },
 ];
 
 export type Order = {
