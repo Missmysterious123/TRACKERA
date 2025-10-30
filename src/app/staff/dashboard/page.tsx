@@ -84,11 +84,12 @@ export default function StaffDashboard() {
     onAfterPrint: () => setOrderToPrint(null),
   });
 
-  useEffect(() => {
-    if (orderToPrint) {
+  const triggerPrint = (order: Order) => {
+    setOrderToPrint(order);
+    setTimeout(() => {
       handlePrint();
-    }
-  }, [orderToPrint, handlePrint]);
+    }, 0);
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -586,7 +587,7 @@ export default function StaffDashboard() {
                               : '-'}
                           </TableCell>
                           <TableCell className="text-right">
-                             <Button variant="outline" size="sm" onClick={() => setOrderToPrint(order)}>
+                             <Button variant="outline" size="sm" onClick={() => triggerPrint(order)}>
                                 <Printer className="mr-2 h-4 w-4"/> Print Receipt
                              </Button>
                           </TableCell>
