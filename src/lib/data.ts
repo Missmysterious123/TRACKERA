@@ -21,6 +21,7 @@ export const menuItems: MenuItem[] = [
   { id: 'item-1', name: 'Pizza', price: 200 },
   { id: 'item-2', name: 'Burger', price: 150 },
   { id: 'item-3', name: 'Pasta', price: 180 },
+  { id: 'item-4', name: '3 Course Meal', price: 450 },
 ];
 
 export const managers = [
