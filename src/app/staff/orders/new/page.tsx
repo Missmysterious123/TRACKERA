@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { PageHeader } from '@/components/app/page-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,9 +19,8 @@ import {
 } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { Plus, Minus, Trash2, CheckCircle } from 'lucide-react';
+import { Plus, Minus, CheckCircle } from 'lucide-react';
 import { menuItems, type MenuItem as MenuItemType } from '@/lib/data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -74,11 +72,11 @@ export default function NewOrderPage() {
     0
   );
 
-  const handlePlaceOrder = () => {
+  const handlePay = () => {
     if (orderItems.length === 0) {
       toast({
         title: 'Empty Order',
-        description: 'Please add items to the order before placing.',
+        description: 'Please add items to the order before paying.',
         variant: 'destructive',
       });
       return;
@@ -91,9 +89,10 @@ export default function NewOrderPage() {
         });
         return;
     }
+    // In a real app, this would trigger a payment process and notify the manager.
     toast({
-      title: 'Order Placed!',
-      description: `Order for table ${tableNumber} has been successfully placed.`,
+      title: 'Payment Complete!',
+      description: `Order for table ${tableNumber} has been paid and is now complete.`,
       action: <CheckCircle className="text-green-500" />,
     });
     setOrderItems([]);
@@ -123,27 +122,14 @@ export default function NewOrderPage() {
                     {menuItems
                       .filter((item) => item.category === category)
                       .map((item) => {
-                        const placeholder = PlaceHolderImages.find((p) => p.id === item.imageId);
                         return (
                           <Card
                             key={item.id}
-                            className="flex items-center p-3 gap-4 cursor-pointer hover:bg-muted"
+                            className="flex flex-col p-3 gap-2 cursor-pointer hover:bg-muted"
                             onClick={() => handleAddItem(item)}
                           >
-                            {placeholder && (
-                              <Image
-                                src={placeholder.imageUrl}
-                                alt={item.name}
-                                width={64}
-                                height={64}
-                                className="rounded-md object-cover h-16 w-16"
-                                data-ai-hint={placeholder.imageHint}
-                              />
-                            )}
-                            <div className="flex-1">
-                              <h3 className="font-semibold">{item.name}</h3>
-                              <p className="text-sm text-primary font-bold">₹{item.price}</p>
-                            </div>
+                            <h3 className="font-semibold">{item.name}</h3>
+                            <p className="text-sm text-primary font-bold">INR {item.price}</p>
                           </Card>
                         );
                       })}
@@ -176,7 +162,7 @@ export default function NewOrderPage() {
                     <div key={item.id} className="flex items-center gap-4">
                       <div className="flex-1">
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-muted-foreground">₹{item.price.toFixed(2)}</p>
+                        <p className="text-sm text-muted-foreground">INR {item.price.toFixed(2)}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <Button
@@ -197,7 +183,7 @@ export default function NewOrderPage() {
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
-                      <p className="w-16 text-right font-semibold">₹{(item.price * quantity).toFixed(2)}</p>
+                      <p className="w-20 text-right font-semibold">INR {(item.price * quantity).toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -211,11 +197,11 @@ export default function NewOrderPage() {
           <CardFooter className="flex flex-col gap-4 mt-auto p-4 border-t">
             <div className="w-full flex justify-between font-bold text-lg">
               <span>Total</span>
-              <span>₹{total.toFixed(2)}</span>
+              <span>INR {total.toFixed(2)}</span>
             </div>
             <Separator />
-            <Button size="lg" className="w-full" onClick={handlePlaceOrder}>
-              Place Order
+            <Button size="lg" className="w-full" onClick={handlePay}>
+              Pay
             </Button>
           </CardFooter>
         </Card>

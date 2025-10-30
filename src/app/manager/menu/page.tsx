@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { PageHeader } from '@/components/app/page-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,7 +15,6 @@ import {
 } from '@/components/ui/tabs';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { menuItems, type MenuItem as MenuItemType } from '@/lib/data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const categories: MenuItemType['category'][] = [
   'Starters',
@@ -27,26 +25,13 @@ const categories: MenuItemType['category'][] = [
 ];
 
 function MenuItemCard({ item }: { item: MenuItemType }) {
-  const placeholder = PlaceHolderImages.find((p) => p.id === item.imageId);
-
   return (
     <Card className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
-      <CardHeader className="p-0">
-        <div className="relative h-40 w-full">
-          {placeholder && (
-            <Image
-              src={placeholder.imageUrl}
-              alt={item.name}
-              fill
-              className="object-cover"
-              data-ai-hint={placeholder.imageHint}
-            />
-          )}
-        </div>
+      <CardHeader className="p-4 pb-0">
+        <CardTitle className="text-lg font-semibold">{item.name}</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
-        <CardTitle className="text-lg font-semibold">{item.name}</CardTitle>
-        <p className="text-primary font-bold mt-2 text-xl">₹{item.price}</p>
+        <p className="text-primary font-bold mt-2 text-xl">INR {item.price}</p>
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-end gap-2">
         <Button variant="ghost" size="icon">

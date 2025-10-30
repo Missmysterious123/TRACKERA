@@ -23,7 +23,7 @@ import { revenueData } from '@/lib/data';
 const kpiData = [
   {
     title: 'Total Revenue',
-    value: '₹4,32,950',
+    value: 'INR 4,32,950',
     change: '+12.5%',
     icon: DollarSign,
     color: 'text-emerald-500',
@@ -37,7 +37,7 @@ const kpiData = [
   },
   {
     title: 'Avg. Order Value',
-    value: '₹359.59',
+    value: 'INR 359.59',
     change: '-1.8%',
     icon: TrendingUp,
     color: 'text-amber-500',
@@ -106,7 +106,7 @@ export default function ManagerDashboard() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `₹${value / 1000}k`}
+                  tickFormatter={(value) => `INR ${value / 1000}k`}
                 />
                 <Tooltip
                   cursor={false}

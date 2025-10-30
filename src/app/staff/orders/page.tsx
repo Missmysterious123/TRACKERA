@@ -93,7 +93,7 @@ export default function ViewOrdersPage() {
                   </TableCell>
                   <TableCell>{order.items.reduce((sum, item) => sum + item.quantity, 0)}</TableCell>
                   <TableCell className="text-right font-medium">
-                    ₹{order.total.toFixed(2)}
+                    INR {order.total.toFixed(2)}
                   </TableCell>
                   <TableCell>
                     <div className="flex justify-end">
