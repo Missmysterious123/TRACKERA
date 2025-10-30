@@ -11,6 +11,8 @@ import {
   Users,
   LogOut,
   ChevronDown,
+  Warehouse,
+  ClipboardCheck,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -36,8 +38,10 @@ const navItems = [
   { href: '/manager/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/manager/branches', icon: Building, label: 'Branches' },
   { href: '/manager/menu', icon: UtensilsCrossed, label: 'Menu' },
-  { href: '/manager/revenue', icon: AreaChart, label: 'Revenue' },
   { href: '/manager/staff', icon: Users, label: 'Staff' },
+  { href: '/manager/inventory', icon: Warehouse, label: 'Inventory' },
+  { href: '/manager/audit', icon: ClipboardCheck, label: 'Monthly Audit' },
+  { href: '/manager/revenue', icon: AreaChart, label: 'Revenue' },
 ];
 
 export function ManagerSidebar() {
