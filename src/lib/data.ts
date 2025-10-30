@@ -1,4 +1,3 @@
-
 export const branches = [
   { id: 'satara', name: 'Satara' },
   { id: 'karad', name: 'Karad' },
@@ -15,13 +14,31 @@ export type MenuItem = {
   id: string;
   name: string;
   price: number;
+  category: 'Starters' | 'Main Course' | 'Breads' | 'Desserts' | 'Beverages';
 };
 
 export const menuItems: MenuItem[] = [
-  { id: 'item-1', name: 'Pizza', price: 200 },
-  { id: 'item-2', name: 'Burger', price: 150 },
-  { id: 'item-3', name: 'Pasta', price: 180 },
-  { id: 'item-4', name: '3 Course Meal', price: 450 },
+  // Starters
+  { id: 'starter-1', name: 'Masala Papad', price: 50, category: 'Starters' },
+  { id: 'starter-2', name: 'Papad', price: 30, category: 'Starters' },
+
+  // Main Course
+  { id: 'main-1', name: 'Akha Masur (Garlic)', price: 180, category: 'Main Course' },
+  { id: 'main-2', name: 'Akha Masur (Jeera)', price: 180, category: 'Main Course' },
+  { id: 'main-3', name: 'Akha Masur (Green Chilli)', price: 180, category: 'Main Course' },
+
+  // Breads
+  { id: 'bread-1', name: 'Roti', price: 20, category: 'Breads' },
+  { id: 'bread-2', name: 'Chapati', price: 15, category: 'Breads' },
+  { id: 'bread-3', name: 'Tandoori Roti', price: 25, category: 'Breads' },
+
+  // Desserts
+  { id: 'dessert-1', name: 'Gulab Jamun', price: 60, category: 'Desserts' },
+
+  // Beverages
+  { id: 'bev-1', name: 'Water Bottle', price: 20, category: 'Beverages' },
+  { id: 'bev-2', name: 'Sprite', price: 40, category: 'Beverages' },
+  { id: 'bev-3', name: 'Coca-Cola', price: 40, category: 'Beverages' },
 ];
 
 export const managers = [

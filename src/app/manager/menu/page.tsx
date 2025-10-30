@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/tabs';
 import { PlusCircle, Edit, Trash2 } from 'lucide-react';
 import { menuItems, type MenuItem as MenuItemType } from '@/lib/data';
+import Image from 'next/image';
 
 const categories: MenuItemType['category'][] = [
   'Starters',

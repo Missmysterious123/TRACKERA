@@ -14,7 +14,13 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { PageHeader } from '@/components/app/page-header';
 import { cn } from '@/lib/utils';
-import { menuItems as simpleMenu, MenuItem } from '@/lib/data';
+import { menuItems, MenuItem } from '@/lib/data';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
 
 type OrderItem = {
   item: MenuItem;
@@ -28,12 +34,15 @@ type TableOrder = {
 const tables = Array.from({ length: 10 }, (_, i) => i + 1);
 const GST_RATE = 0.05;
 
+const categories = [...new Set(menuItems.map(item => item.category))];
+
 export default function StaffDashboard() {
   const [selectedTable, setSelectedTable] = useState<number>(1);
   const [orders, setOrders] = useState<TableOrder>({});
+  const [isClient, setIsClient] = useState(false);
 
-  // Load orders from LocalStorage on initial render
   useEffect(() => {
+    setIsClient(true);
     try {
       const savedOrders = localStorage.getItem('tableOrders');
       if (savedOrders) {
@@ -44,32 +53,39 @@ export default function StaffDashboard() {
     }
   }, []);
 
-  // Save orders to LocalStorage whenever they change
   useEffect(() => {
-    if (Object.keys(orders).length > 0) {
-      localStorage.setItem('tableOrders', JSON.stringify(orders));
-    } else {
-      localStorage.removeItem('tableOrders');
+    if (isClient) {
+      if (Object.keys(orders).length > 0) {
+        localStorage.setItem('tableOrders', JSON.stringify(orders));
+      } else {
+        localStorage.removeItem('tableOrders');
+      }
     }
-  }, [orders]);
+  }, [orders, isClient]);
   
-  const currentOrderItems = orders[selectedTable] || [];
+  const currentOrderItems = useMemo(() => orders[selectedTable] || [], [orders, selectedTable]);
 
-  const handleUpdateQuantity = (itemId: string, newQuantity: number) => {
+  const handleUpdateQuantity = (itemId: string, change: number) => {
     setOrders((prevOrders) => {
       const currentTableOrder = prevOrders[selectedTable] || [];
+      const existingItemIndex = currentTableOrder.findIndex((oi) => oi.item.id === itemId);
+      let newQuantity = change;
+      
+      if (existingItemIndex > -1) {
+        newQuantity = currentTableOrder[existingItemIndex].quantity + change;
+      }
+      
       let updatedItems;
 
       if (newQuantity <= 0) {
         updatedItems = currentTableOrder.filter((oi) => oi.item.id !== itemId);
       } else {
-         const existingItem = currentTableOrder.find((oi) => oi.item.id === itemId);
-         if (existingItem) {
+         if (existingItemIndex > -1) {
             updatedItems = currentTableOrder.map((oi) =>
                 oi.item.id === itemId ? { ...oi, quantity: newQuantity } : oi
             );
          } else {
-            const itemToAdd = simpleMenu.find(item => item.id === itemId);
+            const itemToAdd = menuItems.find(item => item.id === itemId);
             if(itemToAdd) {
               updatedItems = [...currentTableOrder, { item: itemToAdd, quantity: 1}];
             } else {
@@ -105,6 +121,16 @@ export default function StaffDashboard() {
     });
   };
 
+  const handlePayBill = () => {
+    // In a real app, this would send the order to the manager/backend
+    alert(`Order for Table ${selectedTable} has been marked as complete! Total: INR ${total.toFixed(2)}`);
+    handleResetBill();
+  };
+
+  if (!isClient) {
+    return null; // or a loading spinner
+  }
+
   return (
     <>
       <PageHeader
@@ -128,43 +154,54 @@ export default function StaffDashboard() {
       </div>
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Menu</CardTitle>
-                    <CardDescription>Click to add items to the order for Table {selectedTable}.</CardDescription>
-                </CardHeader>
-                <CardContent className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {simpleMenu.map((item) => (
-                        <Card key={item.id} className="flex flex-col">
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-xl">{item.name}</CardTitle>
-                                <CardDescription>INR {item.price.toFixed(2)}</CardDescription>
-                            </CardHeader>
-                            <CardFooter className="mt-auto">
-                                <div className="flex items-center gap-2 w-full">
-                                    <Button
-                                      variant="outline"
-                                      size="icon"
-                                      className="h-8 w-8"
-                                      onClick={() => handleUpdateQuantity(item.id, (currentOrderItems.find(oi => oi.item.id === item.id)?.quantity || 0) - 1)}
-                                    >
-                                      <Minus className="h-4 w-4" />
-                                    </Button>
-                                    <span className="flex-1 text-center font-bold">{currentOrderItems.find(oi => oi.item.id === item.id)?.quantity || 0}</span>
-                                     <Button
-                                      variant="outline"
-                                      size="icon"
-                                      className="h-8 w-8"
-                                      onClick={() => handleUpdateQuantity(item.id, (currentOrderItems.find(oi => oi.item.id === item.id)?.quantity || 1))}
-                                    >
-                                      <Plus className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            </CardFooter>
-                        </Card>
-                    ))}
-                </CardContent>
-            </Card>
+            <Tabs defaultValue={categories[0]} className="w-full">
+              <TabsList className={`grid w-full grid-cols-${categories.length}`}>
+                {categories.map((category) => (
+                  <TabsTrigger key={category} value={category}>
+                    {category}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {categories.map((category) => (
+                <TabsContent key={category} value={category}>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+                      {menuItems.filter(item => item.category === category).map((item) => {
+                          const quantityInOrder = currentOrderItems.find(oi => oi.item.id === item.id)?.quantity || 0;
+                          return (
+                            <Card key={item.id} className="flex flex-col">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-xl">{item.name}</CardTitle>
+                                    <CardDescription>INR {item.price.toFixed(2)}</CardDescription>
+                                </CardHeader>
+                                <CardFooter className="mt-auto">
+                                    <div className="flex items-center gap-2 w-full">
+                                        <Button
+                                          variant="outline"
+                                          size="icon"
+                                          className="h-8 w-8"
+                                          onClick={() => handleUpdateQuantity(item.id, -1)}
+                                          disabled={quantityInOrder === 0}
+                                        >
+                                          <Minus className="h-4 w-4" />
+                                        </Button>
+                                        <span className="flex-1 text-center font-bold">{quantityInOrder}</span>
+                                         <Button
+                                          variant="outline"
+                                          size="icon"
+                                          className="h-8 w-8"
+                                          onClick={() => handleUpdateQuantity(item.id, 1)}
+                                        >
+                                          <Plus className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </CardFooter>
+                            </Card>
+                          )
+                      })}
+                  </div>
+                </TabsContent>
+              ))}
+            </Tabs>
         </div>
 
         <div className="lg:col-span-1">
@@ -189,7 +226,7 @@ export default function StaffDashboard() {
                             variant="ghost"
                             size="icon"
                             className="h-6 w-6 text-muted-foreground hover:text-destructive"
-                            onClick={() => handleUpdateQuantity(item.id, 0)}
+                            onClick={() => handleUpdateQuantity(item.id, -quantity)}
                           >
                             <X className="h-4 w-4" />
                           </Button>
@@ -221,7 +258,7 @@ export default function StaffDashboard() {
                   </div>
                   <Separator className="my-1" />
                   <div className="grid grid-cols-2 gap-2 w-full">
-                    <Button size="lg" className="w-full" onClick={() => alert('Order Paid!')}>
+                    <Button size="lg" className="w-full" onClick={handlePayBill}>
                       <CircleDollarSign className="mr-2 h-5 w-5"/> Pay Bill
                     </Button>
                     <Button size="lg" variant="destructive" className="w-full" onClick={handleResetBill}>
